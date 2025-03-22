@@ -11,8 +11,8 @@ function AboutPage() {
   return (
     <div className="about-page">
       <h1>About</h1>
-      <p>This is a demo application showcasing Vite SSR with TanStack Router.</p>
-      <p>TanStack Router is a fully type-safe router for React applications that provides excellent performance and developer experience.</p>
+      {/* <p>This is a demo application showcasing Vite SSR with TanStack Router.</p>
+      <p>TanStack Router is a fully type-safe router for React applications that provides excellent performance and developer experience.</p> */}
     </div>
   )
 }

@@ -53,45 +53,47 @@ app.use('*all', async (req, res) => {
       render = (await import('./dist/server/entry-server.js')).render
     }
 
-    let didError = false
+    await render(req, res, template)
 
-    const { pipe, abort } = render(req.originalUrl, {
-      onShellError() {
-        res.status(500)
-        res.set({ 'Content-Type': 'text/html' })
-        res.send('<h1>Something went wrong</h1>')
-      },
-      onShellReady() {
-        res.status(didError ? 500 : 200)
-        res.set({ 'Content-Type': 'text/html' })
+    // let didError = false
 
-        const transformStream = new Transform({
-          transform(chunk, encoding, callback) {
-            res.write(chunk, encoding)
-            callback()
-          },
-        })
+    // const { pipe, abort } = render(req.originalUrl, {
+    //   onShellError() {
+    //     res.status(500)
+    //     res.set({ 'Content-Type': 'text/html' })
+    //     res.send('<h1>Something went wrong</h1>')
+    //   },
+    //   onShellReady() {
+    //     res.status(didError ? 500 : 200)
+    //     res.set({ 'Content-Type': 'text/html' })
 
-        const [htmlStart, htmlEnd] = template.split(`<!--app-html-->`)
+    //     const transformStream = new Transform({
+    //       transform(chunk, encoding, callback) {
+    //         res.write(chunk, encoding)
+    //         callback()
+    //       },
+    //     })
+
+    //     const [htmlStart, htmlEnd] = template.split(`<!--app-html-->`)
         
 
-        res.write(htmlStart)
+    //     res.write(htmlStart)
 
-        transformStream.on('finish', () => {
-          res.end(htmlEnd)
-        })
+    //     transformStream.on('finish', () => {
+    //       res.end(htmlEnd)
+    //     })
         
-        pipe(transformStream)
-      },
-      onError(error) {
-        didError = true
-        console.error(error)
-      },
-    })
+    //     pipe(transformStream)
+    //   },
+    //   onError(error) {
+    //     didError = true
+    //     console.error(error)
+    //   },
+    // })
 
-    setTimeout(() => {
-      abort()
-    }, ABORT_DELAY)
+    // setTimeout(() => {
+    //   abort()
+    // }, ABORT_DELAY)
   } catch (e) {
     vite?.ssrFixStacktrace(e)
     console.log(e.stack)
